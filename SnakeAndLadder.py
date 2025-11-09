@@ -784,8 +784,10 @@ def main():
             gameProcess()
         elif playerResponse == "e" or playerResponse == "E":
             print("👋 GoodBye!")
+            input("Press <Enter> to continue...")
             break
         else:
             print("⛔ Invalid Input! Please try again.")
+            input("Press <Enter> to continue...")
 
 main()
