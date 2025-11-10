@@ -3,10 +3,6 @@
 #                                  🐍🪜 SNAKES AND LADDER GAME (By Jaden & David)
 # ======================================================================================================================
 
-# This module acts as a MySQL Connector for Python
-# Or can be also known as MySQL driver written in Python
-import mysql.connector
-
 # This module is a Random Variable Generator
 # That allows us to implement randomizing algorithm systems
 # in python
@@ -26,363 +22,259 @@ SNAKES = {
     60: 23, 75: 28, 83: 63, 85: 59, 90: 48, 92: 25, 97: 87, 99: 79
 }
 
-class DatabaseHandler:
-    # The class 'DatabaseHandler()' is designed to
-    # handle database connections for Snake and Ladders game.
-    # It Manages:
-    #   - Players' Data Management
-    #   - Game Results
-    #   - Win Count Tracking
+gameResults = []
+players = []
+
+class DataHandler:
 
     def __init__(self):
-
-        # Initialize private and public values for the class.
-
-        self.__connector = self.databaseConnector()
-        self.__cursor = self.__connector.cursor()
-        self.status = self.__isDatabaseConnected()
-
-    def databaseConnector(self):
-
-        # Starts and return a connection to MySQL WorkBench.
-
-        db = mysql.connector.connect(
-            host = "127.0.0.1",
-            user = "root",
-            passwd = "123456",
-            database = "snakeAndLadderDatabase"
-        )
-        return db
+        self.playerIndex = 0
 
     def registerUser(self):
-
-        # Register a new player in the database.
-
-        # Fetch all the players' attributes from the database
-        players = self.fetchAllPlayers()
 
         # Capture all the existing players' IDs and Names.
         existingIds = [player[0] for player in players]
         existingNames = [player[1] for player in players]
 
-        # Check if python has connected to a database.
-        # If it didn't connect, the code won't run to prevent error crashing.
-        if self.__isDatabaseConnected():
+        # Make sure it runs indefinitely
+        while True:
 
-            # Make sure it runs indefinitely
-            while True:
+            # Ask for Player's ID.
+            playerId = input("Enter your Player ID (5 - 20 char) or type 'e' to exit: ")
 
-                # Ask for Player's ID.
-                playerId = input("Enter your Player ID (5 - 20 char) or type 'e' to exit: ")
+            # Let player has the authority to exit anytime they like to.
+            if playerId == 'e' or playerId == 'E':
+                break
 
-                # Let player has the authority to exit anytime they like to.
-                if playerId == 'e' or playerId == 'E':
-                    break
+            # Check if duplication exists in the database.
+            elif playerId in existingIds:
+                print("❌ This Player ID is already registered.")
+                break
 
-                # Check if duplication exists in the database.
-                elif playerId in existingIds:
-                    print("❌ This Player ID is already registered.")
-                    break
+            # Prevent empty player ID.
+            elif playerId.isspace() or playerId == "":
+                print("❗ Player ID CANNOT be empty!")
+                break
 
-                # Prevent empty player ID.
-                elif playerId.isspace() or playerId == "":
-                    print("❗ Player ID CANNOT be empty!")
-                    break
+            # Prevent short or long player ID.
+            elif len(playerId) > 20:
+                print("❗ Player ID must be LESSER than 20 characters!")
+                break
+            elif len(playerId) < 5:
+                print("❗ Player ID must be LARGER than 5 characters!")
+                break
 
-                # Prevent short or long player ID.
-                elif len(playerId) > 20:
-                    print("❗ Player ID must be LESSER than 20 characters!")
-                    break
-                elif len(playerId) < 5:
-                    print("❗ Player ID must be LARGER than 5 characters!")
-                    break
+            # Ask for Player's name.
+            playerName = input("Enter your Player Name or type 'e' to exit: ")
 
-                # Ask for Player's name.
-                playerName = input("Enter your Player Name or type 'e' to exit: ")
+            # Let player has the authority to exit anytime they like to.
+            if playerName == 'e' or playerName == 'E':
+                break
 
-                # Let player has the authority to exit anytime they like to.
-                if playerName == 'e' or playerName == 'E':
-                    break
+            # Check if duplication exists in the database.
+            elif playerName in existingNames:
+                print("❌ This Player Name is already registered.")
+                break
 
-                # Check if duplication exists in the database.
-                elif playerName in existingNames:
-                    print("❌ This Player Name is already registered.")
-                    break
+            # Starts to run the process if all the requirements are passed.
+            else:
+                newPlayerData = [playerId, playerName, 0]
+                players.append(newPlayerData)
+                print(f"✅ Player ID: {playerId} | Player Name: {playerName} has been registered")
 
-                # Starts to run the process if all the requirements are passed.
-                else:
-                    self.__cursor.execute("INSERT INTO players (playerId, name, wins) VALUES (%s, %s, %s)", (playerId, playerName, 0))
-                    self.__connector.commit()
-                    print(f"✅ Player ID: {playerId} | Player Name: {playerName} has been registered")
-
-            # To let the player able to read and understand all the infos or errors,
-            # An input() function is placed to prevent the code in the next part runs.
-            # The Player can then press <Enter> to proceed on the next part.
-            print()
-            input("Press <Enter> to continue...")
-            print()
+        # To let the player able to read and understand all the infos or errors,
+        # An input() function is placed to prevent the code in the next part runs.
+        # The Player can then press <Enter> to proceed on the next part.
+        print()
+        input("Press <Enter> to continue...")
+        print()
 
     def editPlayersInfo(self):
 
         # Edit an existing player's name using their player ID.
 
-        # Fetch all the players' attributes from the database
-        players = self.fetchAllPlayers()
-
         # Capture all the existing players' IDs and Names.
         existingIds = [player[0] for player in players]
         existingNames = [player[1] for player in players]
 
-        # Check if python has connected to a database.
-        # If it didn't connect, the code won't run to prevent error crashing.
-        if self.__isDatabaseConnected():
+        # Make sure it runs indefinitely
+        while True:
 
-            # Make sure it runs indefinitely
-            while True:
+            # Ask for Player's ID.
+            playerId = input("Enter your Player ID or type 'e' to exit: ")
 
-                # Ask for Player's ID.
-                playerId = input("Enter your Player ID or type 'e' to exit: ")
+            # Let player has the authority to exit anytime they like to.
+            if playerId == 'e' or playerId == 'E':
+                break
 
-                # Let player has the authority to exit anytime they like to.
-                if playerId == 'e' or playerId == 'E':
-                    break
+            # Prevent empty player ID.
+            elif playerId.isspace() or playerId == "":
+                print("❗ Player ID CANNOT be empty!")
+                break
 
-                # Prevent empty player ID.
-                elif playerId.isspace() or playerId == "":
-                    print("❗ Player ID CANNOT be empty!")
-                    break
+            # If the player's ID does not exist,
+            # This code will run to inform typo and other possible errors.
+            elif playerId != existingIds:
+                print("❓ This Player ID is not registered.")
+                break
 
-                # If the player's ID does not exist,
-                # This code will run to inform typo and other possible errors.
-                elif playerId != existingIds:
-                    print("❓ This Player ID is not registered.")
-                    break
+            # Ask for Player's name.
+            newPlayerName = input("Input your new Player Name or type 'e' to exit: ")
 
-                # Ask for Player's name.
-                newPlayerName = input("Input your new Player Name or type 'e' to exit: ")
+            # Let player has the authority to exit anytime they like to.
+            if newPlayerName == 'e' or newPlayerName == 'E':
+                break
 
-                # Let player has the authority to exit anytime they like to.
-                if newPlayerName == 'e' or newPlayerName == 'E':
-                    break
+            # Check if duplication exists in the database.
+            if newPlayerName in existingNames:
+                print("❌ This Player Name is already existed.")
+                break
 
-                # Check if duplication exists in the database.
-                if newPlayerName in existingNames:
-                    print("❌ This Player Name is already existed.")
-                    break
+            # Starts to run the process if all the requirements are passed.
+            else:
+                for player in players:
+                    self.playerIndex += 1
+                    if playerId == player[0]:
+                        player[1] = newPlayerName
+                        self.playerIndex = 0
+                        break
 
-                # Starts to run the process if all the requirements are passed.
-                else:
-                    self.__cursor.execute("UPDATE players SET name=%s WHERE playerId=%s", (newPlayerName, playerId))
-                    self.__connector.commit()
-                    print(f"✅ Player Name: {newPlayerName} has been updated")
+                print(f"✅ Player Name: {newPlayerName} has been updated")
 
-            # To let the player able to read and understand all the infos or errors,
-            # An input() function is placed to prevent the code in the next part runs.
-            # The Player can then press <Enter> to proceed on the next part.
-            print()
-            input("Press <Enter> to continue...")
-            print()
+        # To let the player able to read and understand all the infos or errors,
+        # An input() function is placed to prevent the code in the next part runs.
+        # The Player can then press <Enter> to proceed on the next part.
+        print()
+        input("Press <Enter> to continue...")
+        print()
 
     def deletePlayers(self):
 
         # Delete a player infos and record from the database by player ID.
 
-        # Fetch all the players' attributes from the database
-        players = self.fetchAllPlayers()
-
         # Acts as an identifier key to
         # identify if the value exists in the database
         existKey = False
 
-        # Check if python has connected to a database.
-        # If it didn't connect, the code won't run to prevent error crashing.
-        if self.__isDatabaseConnected():
+        # Make sure it runs indefinitely
+        while True:
 
-            # Make sure it runs indefinitely
-            while True:
+            # Ask for player's ID
+            playerId = input("Enter the Player ID or type 'e' to exit: ")
 
-                # Ask for player's ID
-                playerId = input("Enter the Player ID or type 'e' to exit: ")
+            # Searching for the player's ID in the database
+            for player in players:
 
-                # Searching for the player's ID in the database
-                for player in players:
-
-                    # If the player's ID doesn't exist,
-                    # 'existsKey' value will remain the same (False).
-                    # Else the value will change into True.
-                    if playerId == player[0]:
-                        existKey = True
-
-                # Let player has the authority to exit anytime they like to.
-                if playerId == 'e' or playerId == 'E':
+                # If the player's ID doesn't exist,
+                # 'existsKey' value will remain the same (False).
+                # Else the value will change into True.
+                if playerId == player[0]:
+                    existKey = True
                     break
 
-                # Prevent empty player ID.
-                elif playerId.isspace() or playerId == "":
-                    print("❌ Player ID CANNOT be empty!")
+                self.playerIndex += 1
 
-                # If the player's ID does not exist,
-                # This code will run to inform typo and other possible errors.
-                elif existKey == False:
-                    print("❓ This Player ID is not registered.")
+            # Let player has the authority to exit anytime they like to.
+            if playerId == 'e' or playerId == 'E':
+                break
+
+            # Prevent empty player ID.
+            elif playerId.isspace() or playerId == "":
+                print("❌ Player ID CANNOT be empty!")
+
+            # If the player's ID does not exist,
+            # This code will run to inform typo and other possible errors.
+            elif existKey == False:
+                print("❓ This Player ID is not registered.")
+
+            # Starts to run the process if all the requirements are passed.
+            elif existKey == True and playerId != "":
 
                 # Starts to run the process if all the requirements are passed.
-                elif existKey == True and playerId != "":
+                players.pop(self.playerIndex)
+                self.playerIndex = 0
+                print(f"🗑️ Player ID: {playerId} has been deleted")
 
-                    # Starts to run the process if all the requirements are passed.
-                    self.__cursor.execute("DELETE FROM players WHERE playerId=%s", (playerId, ))
-                    self.__connector.commit()
-                    print(f"🗑️ Player ID: {playerId} has been deleted")
-
-            # To let the player able to read and understand all the infos or errors,
-            # An input() function is placed to prevent the code in the next part runs.
-            # The Player can then press <Enter> to proceed on the next part.
-            print()
-            input("Press <Enter> to continue...")
-            print()
+        # To let the player able to read and understand all the infos or errors,
+        # An input() function is placed to prevent the code in the next part runs.
+        # The Player can then press <Enter> to proceed on the next part.
+        print()
+        input("Press <Enter> to continue...")
+        print()
 
     def addGameResults(self, roundCount, winner, runnerUp, secondRunnerUp = None):
+        # Check if there are any game results exists
+        # as it will affect the naming of the Game ID.
+        if gameResults == []:
+            largestId = 0
+        else:
 
-        # Insert a new game record into the database.
-        # The arguments (winner, runnerUp) are required to insert.
-        # The argument (secondRunnerUp) is optional.
-
-        # Fetch all the games' results from the database
-        gameResults = self.fetchAllGameResults()
-
-        # Check if python has connected to a database.
-        # If it didn't connect, the code won't run to prevent error crashing.
-        if self.__isDatabaseConnected():
-
-            # Check if there are any game results exists
-            # as it will affect the naming of the Game ID.
-            if gameResults == []:
-                largestId = 0
-            else:
-
-                # result[0] represents the game ID
-                # The game ID format is "G001"
-                #
-                # Assume that "G001" is our game's ID.
-                # result[0] will be "G001"
-                # [1:] will chop its value,
-                # which lets it start from the second value to the end.
-                #
-                # "     G   0   0   1       "
-                #           ^       ^
-                #         Start    End
-                #
-                # result[0][1:] = "001"
-                # Conclusion: int(result[0][1:]) = 1
-                resultInInt = [int(result[0][1:]) for result in gameResults]
-
-                # max() will returns the maximum value of the list.
-                largestId = max(resultInInt)
-
-            # This is an increment function that will add up
-            # by one from the largest ID number.
+            # result[0] represents the game ID
+            # The game ID format is "G001"
             #
-            # About ':03d' format, refers to the python text book (pg. 96 & 97)
+            # Assume that "G001" is our game's ID.
+            # result[0] will be "G001"
+            # [1:] will chop its value,
+            # which lets it start from the second value to the end.
             #
-            # Example 1:
-            # print(f"{31:4d}")
-            # Output:
-            #     31
-            # It adds (4 - len("31")) empty spaces in front.
+            # "     G   0   0   1       "
+            #           ^       ^
+            #         Start    End
             #
-            # Example 2:
-            # print(f"{31:04d}")
-            # Output:
-            # 000031
-            # It adds (4 - len("31")) zeros in front.
-            newGameId = f"G{largestId + 1:03d}"
+            # result[0][1:] = "001"
+            # Conclusion: int(result[0][1:]) = 1
+            resultInInt = [int(result[0][1:]) for result in gameResults]
 
-            # Starts to run this process if there are 3 or more players.
-            if secondRunnerUp != None:
-                self.__cursor.execute(
-                    "INSERT INTO games (gameId, roundCount, winner, runnerUp, secondRunnerUp) VALUES (%s, %s, %s, %s, %s)",
-                    (newGameId, roundCount, winner, runnerUp, secondRunnerUp)
-                )
+            # max() will returns the maximum value of the list.
+            largestId = max(resultInInt)
 
-            # There is still a possibility where only 2 players played the game.
-            # This statement will only add two placements into the database.
-            else:
-                self.__cursor.execute(
-                    "INSERT INTO games (gameId, roundCount, winner, runnerUp, secondRunnerUp) VALUES (%s, %s, %s, %s, %s)",
-                    (newGameId, roundCount, winner, runnerUp, "There is no third player")
-                )
-            self.__connector.commit()
+        # This is an increment function that will add up
+        # by one from the largest ID number.
+        #
+        # About ':03d' format, refers to the python text book (pg. 96 & 97)
+        #
+        # Example 1:
+        # print(f"{31:4d}")
+        # Output:
+        #     31
+        # It adds (4 - len("31")) empty spaces in front.
+        #
+        # Example 2:
+        # print(f"{31:04d}")
+        # Output:
+        # 000031
+        # It adds (4 - len("31")) zeros in front.
+        newGameId = f"G{largestId + 1:03d}"
 
-            # Let the players know that the processes finished
-            # and run successfully.
-            print(f"✅ Game Results Added, Game ID: {newGameId}")
+
+        # Starts to run this process if there are 3 or more players.
+        if secondRunnerUp != None:
+            newGameResult = [newGameId, roundCount, winner, runnerUp, secondRunnerUp]
+            gameResults.append(newGameResult)
+
+        # There is still a possibility where only 2 players played the game.
+        # This statement will only add two placements into the database.
+        else:
+            newGameResult = [newGameId, roundCount, winner, runnerUp, "There is no third player in this game."]
+            gameResults.append(newGameResult)
+
+        # Let the players know that the processes finished
+        # and run successfully.
+        print(f"✅ Game Results Added, Game ID: {newGameId}")
 
     def addWinCount(self, playerId):
 
         # Increment the win count of a player in the database.
 
-        # Check if python has connected to a database.
-        # If it didn't connect, the code won't run to prevent error crashing.
-        if self.__isDatabaseConnected():
-            self.__cursor.execute("UPDATE players SET wins=wins + 1 WHERE playerId=%s", (playerId, ))
-            self.__connector.commit()
+        for player in players:
+            if playerId == player[0]:
+                player[2] += 1
+                break
 
-    def fetchAllPlayers(self):
-
-        # Fetch all registered players' data from the database.
-
-        # Check if python has connected to a database.
-        # If it didn't connect, the code won't run to prevent error crashing.
-        if self.__isDatabaseConnected():
-            self.__cursor.execute("SELECT * FROM players ORDER BY name ASC")
-            players = self.__cursor.fetchall()
-
-        return list(players)
-
-    def fetchAllGameResults(self):
-
-        # Fetch all completed game results from the database.
-
-        # Check if python has connected to a database.
-        # If it didn't connect, the code won't run to prevent error crashing.
-        if self.__isDatabaseConnected():
-            self.__cursor.execute("SELECT * FROM games ORDER BY gameId DESC")
-            games = self.__cursor.fetchall()
-
-        return list(games)
-
-    def closingDatabase(self):
-
-        # Close the cursor and database connection.
-
-        # Checks if cursor and connector are active.
-        # If no checking, the program might cause a crashable error
-        if self.__cursor:
-            self.__cursor.close()
-
-        if self.__connector:
-            self.__connector.close()
-
-    def __isDatabaseConnected(self):
-
-        # Check and confirm whether the database is connected.
-
-        # Check if python has connected to a database.
-        # If it connects, the function will return True.
-        # Else return False.
-        if self.databaseConnector().is_connected() or self.databaseConnector() != None:
-            return True
-        else:
-            print("❌ Database is not connected or failed to connect.")
-            return False
-    
 def showGameResultsInList():
 
     # Displays all game results with winner and runner-up details
     # with a better looking User Interface.
-
-    db = DatabaseHandler()
-    gameResults = db.fetchAllGameResults()
 
     print("📊 | Game Results:")
     print("---------------------------------------")
@@ -402,9 +294,6 @@ def showGameResultsInList():
             print(f"Second Runner Up: {result[4]}")
             print()
 
-    # Close the cursor and database connection.
-    db.closingDatabase()
-
     # To let the player able to read and understand all the infos or errors,
     # An input() function is placed to prevent the code in the next part runs.
     # The Player can then press <Enter> to proceed on the next part.
@@ -414,11 +303,6 @@ def showPlayerList():
 
     # Displays all registered players with their win counts
     # with a better looking User Interface.
-
-    db = DatabaseHandler()
-
-    # Fetch all registered players' data from the database.
-    players = db.fetchAllPlayers()
 
     print("👥 | Player List:")
     print("-------------------")
@@ -434,9 +318,6 @@ def showPlayerList():
             print(f"Winning Count: {player[2]}")
             print()
 
-    # Close the cursor and database connection.
-    db.closingDatabase()
-
     # To let the player able to read and understand all the infos or errors,
     # An input() function is placed to prevent the code in the next part runs.
     # The Player can then press <Enter> to proceed on the next part.
@@ -446,10 +327,7 @@ def gameProcess():
 
     # Runs the game processes and manage player turns.
 
-    db = DatabaseHandler()
-
-    # Fetch all registered players' data from the database.
-    players = db.fetchAllPlayers()
+    db = DataHandler()
 
     # Set an immutable value with a fixed name
     # to prevent type errors and provide clarity.
@@ -674,9 +552,6 @@ def gameProcess():
 
     input("Press <Enter> to continue...")
 
-    # Close the cursor and database connection.
-    db.closingDatabase()
-
 def placementIdentifier(players):
 
     # Sort players based on their board position
@@ -768,7 +643,7 @@ def main():
         print("Type your choice (1 - 6 | s | e) to proceed")
         playerResponse = input(">> ")
 
-        db = DatabaseHandler()
+        db = DataHandler()
 
         if playerResponse == "1":
             db.registerUser()
