@@ -73,7 +73,8 @@ class DatabaseHandler:
             while True:
 
                 # Ask for Player's ID.
-                playerId = input("Enter your Player ID (5 - 20 char) or type 'e' to exit: ")
+                print("Enter your Player ID (5 - 20 char) to register")
+                playerId = input("or type 'e' to exit: ")
 
                 # Let player has the authority to exit anytime they like to.
                 if playerId == 'e' or playerId == 'E':
@@ -141,7 +142,8 @@ class DatabaseHandler:
             while True:
 
                 # Ask for Player's ID.
-                playerId = input("Enter your Player ID or type 'e' to exit: ")
+                print("Enter your Player ID to edit info")
+                playerId = input("or type 'e' to exit: ")
 
                 # Let player has the authority to exit anytime they like to.
                 if playerId == 'e' or playerId == 'E':
@@ -202,7 +204,8 @@ class DatabaseHandler:
             while True:
 
                 # Ask for player's ID
-                playerId = input("Enter the Player ID or type 'e' to exit: ")
+                print("Enter the Player ID to delete")
+                playerId = input("or type 'e' to exit: ")
 
                 # Searching for the player's ID in the database
                 for player in players:

@@ -23,7 +23,10 @@ SNAKES = {
 }
 
 gameResults = []
-players = []
+players = [
+    ["P01", "Player1", 0],
+    ["P02", "Player2", 0]
+]
 
 class DataHandler:
 
@@ -40,7 +43,8 @@ class DataHandler:
         while True:
 
             # Ask for Player's ID.
-            playerId = input("Enter your Player ID (5 - 20 char) or type 'e' to exit: ")
+            print("Enter your Player ID (5 - 20 char) to register")
+            playerId = input("or type 'e' to exit: ")
 
             # Let player has the authority to exit anytime they like to.
             if playerId == 'e' or playerId == 'E':
@@ -101,7 +105,8 @@ class DataHandler:
         while True:
 
             # Ask for Player's ID.
-            playerId = input("Enter your Player ID or type 'e' to exit: ")
+            print("Enter your Player ID to edit info")
+            playerId = input("or type 'e' to exit: ")
 
             # Let player has the authority to exit anytime they like to.
             if playerId == 'e' or playerId == 'E':
@@ -133,11 +138,12 @@ class DataHandler:
             # Starts to run the process if all the requirements are passed.
             else:
                 for player in players:
-                    self.playerIndex += 1
                     if playerId == player[0]:
                         player[1] = newPlayerName
                         self.playerIndex = 0
                         break
+                    else:
+                        self.playerIndex += 1
 
                 print(f"✅ Player Name: {newPlayerName} has been updated")
 
@@ -160,7 +166,8 @@ class DataHandler:
         while True:
 
             # Ask for player's ID
-            playerId = input("Enter the Player ID or type 'e' to exit: ")
+            print("Enter the Player ID to delete")
+            playerId = input("or type 'e' to exit: ")
 
             # Searching for the player's ID in the database
             for player in players:
@@ -171,8 +178,6 @@ class DataHandler:
                 if playerId == player[0]:
                     existKey = True
                     break
-
-                self.playerIndex += 1
 
             # Let player has the authority to exit anytime they like to.
             if playerId == 'e' or playerId == 'E':
@@ -190,7 +195,14 @@ class DataHandler:
             # Starts to run the process if all the requirements are passed.
             elif existKey == True and playerId != "":
 
+                for player in players:
+                    if playerId == player[0]:
+                        break
+                    else:
+                        self.playerIndex += 1
+
                 # Starts to run the process if all the requirements are passed.
+                print(self.playerIndex)
                 players.pop(self.playerIndex)
                 self.playerIndex = 0
                 print(f"🗑️ Player ID: {playerId} has been deleted")
@@ -642,6 +654,7 @@ def main():
         print("--------------------------------")
         print("Type your choice (1 - 6 | s | e) to proceed")
         playerResponse = input(">> ")
+        print()
 
         db = DataHandler()
 
