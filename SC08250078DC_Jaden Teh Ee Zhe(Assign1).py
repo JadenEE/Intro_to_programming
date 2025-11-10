@@ -71,6 +71,7 @@ while loopKey == 1:
         print("========================================")
         print()
         print("Thanks for dining! Have a wonderful day!")
+        input("Press <Enter> to continue...")
 
         loopKey = 0
     elif userInput in foods:
