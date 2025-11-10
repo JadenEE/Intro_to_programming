@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS games (
 );
 
 INSERT IGNORE INTO players (playerId, name, wins) VALUES
-('P01', 'Player1', 0),
-('P02', 'Player2', 0),
-('P03', 'Player3', 0),
-('P04', 'Player4', 0);
+('sc08250078dc', 'Jaden', 0),
+('si0625000085dc', 'JadenThe', 0),
+('m-9020566', 'Player3', 0),
+('playerid', 'Player4', 0);

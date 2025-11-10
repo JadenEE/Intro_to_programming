@@ -115,11 +115,12 @@ class DatabaseHandler:
                     self.__connector.commit()
                     print(f"✅ Player ID: {playerId} | Player Name: {playerName} has been registered")
 
-            # To let the player able to read and understand all the infos or errors,
-            # An input() function is placed to prevent the code in the next part runs.
-            # The Player can then press <Enter> to proceed on the next part.
-            input("Press <Enter> to continue...")
-            print()
+                # To let the player able to read and understand all the infos or errors,
+                # An input() function is placed to prevent the code in the next part runs.
+                # The Player can then press <Enter> to proceed on the next part.
+                print()
+                input("Press <Enter> to continue...")
+                print()
 
     def editPlayersInfo(self):
 
@@ -175,11 +176,13 @@ class DatabaseHandler:
                     self.__connector.commit()
                     print(f"✅ Player Name: {newPlayerName} has been updated")
 
-            # To let the player able to read and understand all the infos or errors,
-            # An input() function is placed to prevent the code in the next part runs.
-            # The Player can then press <Enter> to proceed on the next part.
-            input("Press <Enter> to continue...")
-            print()
+                # To let the player able to read and understand all the infos or errors,
+                # An input() function is placed to prevent the code in the next part runs.
+                # The Player can then press <Enter> to proceed on the next part.
+                print()
+                input("Press <Enter> to continue...")
+                print()
+
 
     def deletePlayers(self):
 
@@ -232,11 +235,12 @@ class DatabaseHandler:
                     self.__connector.commit()
                     print(f"🗑️ Player ID: {playerId} has been deleted")
 
-            # To let the player able to read and understand all the infos or errors,
-            # An input() function is placed to prevent the code in the next part runs.
-            # The Player can then press <Enter> to proceed on the next part.
-            input("Press <Enter> to continue...")
-            print()
+                # To let the player able to read and understand all the infos or errors,
+                # An input() function is placed to prevent the code in the next part runs.
+                # The Player can then press <Enter> to proceed on the next part.
+                print()
+                input("Press <Enter> to continue...")
+                print()
 
     def addGameResults(self, roundCount, winner, runnerUp, secondRunnerUp = None):
 
@@ -780,11 +784,15 @@ def main():
         elif playerResponse == "s" or playerResponse == "S":
             gameProcess()
         elif playerResponse == "e" or playerResponse == "E":
+            print()
             print("👋 GoodBye!")
+            print()
             input("Press <Enter> to continue...")
             break
         else:
+            print()
             print("⛔ Invalid Input! Please try again.")
+            print()
             input("Press <Enter> to continue...")
 
 main()
