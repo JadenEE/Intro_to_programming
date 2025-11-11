@@ -414,69 +414,6 @@ def gameProcess():
                     print("⛔ | Game Ended")
                     gameOver = True
                     break
-
-                elif response == "a":
-                    while True:
-                        for player in newPlayers:
-                            playerId = player[0]
-                            playerName = player[1]
-                            # time.sleep(.05)
-                            dice = random.randint(1, 6)
-                            print()
-
-                            if dice < 1 or dice > 6:
-                                print(f"❌ Dice Roll Error: Invalid Value -> {dice}")
-                            else:
-                                print(f"🎲 | {playerName} rolled a {dice}!")
-                                player[-1] += dice
-
-                            if player[-1] > MAX_SCORE:
-                                player[-1] = MAX_SCORE
-
-                            if player[-1] in LADDERS:
-                                print(f"🪜 | Yay! {playerName} climbs on a ladder!")
-                                player[-1] = LADDERS[player[-1]]
-                            elif player[-1] in SNAKES:
-                                print(f"🐍 | Oh no! {playerName} get bitten by a snake!")
-                                player[-1] = SNAKES[player[-1]]
-
-                            print(f"{playerName} is now at {player[-1]}.\n")
-
-                            if player[-1] == MAX_SCORE:
-                                gameOver = True
-                                placement = placementIdentifier(newPlayers)
-                                db.addWinCount(playerId)
-
-                                if len(placement) < 3:
-                                    db.addGameResults(roundCount, placement[0], placement[1], "")
-                                else:
-                                    db.addGameResults(roundCount, placement[0], placement[1], placement[2])
-
-                                print(f"👾 | Rounds played: {roundCount}.")
-                                print(f"🏆 | Congrats to {placement[0]}. {placement[0]} is the winner!")
-                                print(f"🥈 | And the runner up goes to ... {placement[1]}!")
-
-                                if len(placement) >= 3:
-                                    print(f"🥉 | Don't forget about our second runner up ... {placement[2]}!")
-
-                                print()
-                                break
-                        if gameOver:
-                            break
-                        else:
-                            print("📊 | Players Current Progress:")
-                            print(f"🎮 | Round(s) Played >> {roundCount}.")
-                            roundCount += 1
-                            for player in newPlayers:
-                                playerName = player[1]
-                                playerPosition = player[-1]
-
-                                print(f"{playerName} >> {playerPosition}")
-
-                            print("Press <Enter> to continue...")
-
-                    if gameOver:
-                        break
                 else:
                     # Set a name for the attribute of the player
                     # to provide clarity.
@@ -633,13 +570,6 @@ def placementIdentifier(players):
     # - Now Bob is placed in the first spot of the list.
     # - After that, the code will then repeat the process several times
     # - until it is sorted with ranks ascendingly.
-
-playersExample = [
-    ['P002', 'Bob', 3, 89],
-    ['P001', 'Alice', 5, 45],
-    ['P003', 'Charlie', 2, 67],
-    ['P004', 'KAKAKA', 3, 99],
-]
 
 def main():
     while True:
