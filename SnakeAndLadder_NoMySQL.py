@@ -43,6 +43,7 @@ class DataHandler:
         while True:
 
             # Ask for Player's ID.
+            print()
             print("Enter your Player ID (5 - 20 char) to register")
             playerId = input("or type 'e' to exit: ")
 
@@ -101,12 +102,22 @@ class DataHandler:
         existingIds = [player[0] for player in players]
         existingNames = [player[1] for player in players]
 
+        # Initialize a mutable variable for identifying
+        # the existing of player.
+        playerExists = False
+
         # Make sure it runs indefinitely
         while True:
 
             # Ask for Player's ID.
+            print()
             print("Enter your Player ID to edit info")
             playerId = input("or type 'e' to exit: ")
+
+            # Check if the player's ID exists in the database.
+            for player in players:
+                if player[0] == playerId:
+                    playerExists = True
 
             # Let player has the authority to exit anytime they like to.
             if playerId == 'e' or playerId == 'E':
@@ -131,7 +142,7 @@ class DataHandler:
                 break
 
             # Check if duplication exists in the database.
-            if newPlayerName in existingNames:
+            elif playerExists == False:
                 print("❌ This Player Name is already existed.")
                 break
 
@@ -166,6 +177,7 @@ class DataHandler:
         while True:
 
             # Ask for player's ID
+            print()
             print("Enter the Player ID to delete")
             playerId = input("or type 'e' to exit: ")
 
@@ -214,7 +226,7 @@ class DataHandler:
         input("Press <Enter> to continue...")
         print()
 
-    def addGameResults(self, roundCount, winner, runnerUp, secondRunnerUp = None):
+    def addGameResults(self, roundCount, winner, runnerUp, secondRunnerUp):
         # Check if there are any game results exists
         # as it will affect the naming of the Game ID.
         if gameResults == []:
@@ -260,7 +272,7 @@ class DataHandler:
 
 
         # Starts to run this process if there are 3 or more players.
-        if secondRunnerUp != None:
+        if secondRunnerUp != "":
             newGameResult = [newGameId, roundCount, winner, runnerUp, secondRunnerUp]
             gameResults.append(newGameResult)
 
@@ -396,9 +408,9 @@ def gameProcess():
                     #   - 2 players
                     #   - More than 3 players
                     if len(placement) < 3:
-                        db.addGameResults(placement[0], placement[1])
+                        db.addGameResults(roundCount, placement[0], placement[1], "")
                     else:
-                        db.addGameResults(placement[0], placement[1], placement[2])
+                        db.addGameResults(roundCount, placement[0], placement[1], placement[2])
 
                     print("⛔ | Game Ended")
                     gameOver = True
@@ -437,7 +449,7 @@ def gameProcess():
                                 db.addWinCount(playerId)
 
                                 if len(placement) < 3:
-                                    db.addGameResults(roundCount, placement[0], placement[1])
+                                    db.addGameResults(roundCount, placement[0], placement[1], "")
                                 else:
                                     db.addGameResults(roundCount, placement[0], placement[1], placement[2])
 
@@ -522,7 +534,7 @@ def gameProcess():
                         #   - 2 players
                         #   - More than 3 players
                         if len(placement) < 3:
-                            db.addGameResults(roundCount, placement[0], placement[1])
+                            db.addGameResults(roundCount, placement[0], placement[1], "")
                         else:
                             db.addGameResults(roundCount, placement[0], placement[1], placement[2])
 

@@ -73,6 +73,7 @@ class DatabaseHandler:
             while True:
 
                 # Ask for Player's ID.
+                print()
                 print("Enter your Player ID (5 - 20 char) to register")
                 playerId = input("or type 'e' to exit: ")
 
@@ -134,6 +135,10 @@ class DatabaseHandler:
         existingIds = [player[0] for player in players]
         existingNames = [player[1] for player in players]
 
+        # Initialize a mutable variable for identifying
+        # the existing of player.
+        playerExists = False
+
         # Check if python has connected to a database.
         # If it didn't connect, the code won't run to prevent error crashing.
         if self.__isDatabaseConnected():
@@ -142,8 +147,14 @@ class DatabaseHandler:
             while True:
 
                 # Ask for Player's ID.
+                print()
                 print("Enter your Player ID to edit info")
                 playerId = input("or type 'e' to exit: ")
+
+                # Check if the player's ID exists in the database.
+                for player in players:
+                    if player[0] == playerId:
+                        playerExists = True
 
                 # Let player has the authority to exit anytime they like to.
                 if playerId == 'e' or playerId == 'E':
@@ -156,7 +167,7 @@ class DatabaseHandler:
 
                 # If the player's ID does not exist,
                 # This code will run to inform typo and other possible errors.
-                elif playerId != existingIds:
+                elif playerExists == False:
                     print("❓ This Player ID is not registered.")
                     break
 
@@ -168,12 +179,12 @@ class DatabaseHandler:
                     break
 
                 # Check if duplication exists in the database.
-                if newPlayerName in existingNames:
+                elif newPlayerName in existingNames:
                     print("❌ This Player Name is already existed.")
                     break
 
                 # Starts to run the process if all the requirements are passed.
-                else:
+                elif playerId in existingIds:
                     self.__cursor.execute("UPDATE players SET name=%s WHERE playerId=%s", (newPlayerName, playerId))
                     self.__connector.commit()
                     print(f"✅ Player Name: {newPlayerName} has been updated")
@@ -204,6 +215,7 @@ class DatabaseHandler:
             while True:
 
                 # Ask for player's ID
+                print()
                 print("Enter the Player ID to delete")
                 playerId = input("or type 'e' to exit: ")
 
@@ -244,7 +256,7 @@ class DatabaseHandler:
             input("Press <Enter> to continue...")
             print()
 
-    def addGameResults(self, roundCount, winner, runnerUp, secondRunnerUp = None):
+    def addGameResults(self, roundCount, winner, runnerUp, secondRunnerUp):
 
         # Insert a new game record into the database.
         # The arguments (winner, runnerUp) are required to insert.
@@ -509,9 +521,9 @@ def gameProcess():
                     #   - 2 players
                     #   - More than 3 players
                     if len(placement) < 3:
-                        db.addGameResults(placement[0], placement[1])
+                        db.addGameResults(roundCount, placement[0], placement[1], None)
                     else:
-                        db.addGameResults(placement[0], placement[1], placement[2])
+                        db.addGameResults(roundCount, placement[0], placement[1], placement[2])
 
                     print("⛔ | Game Ended")
                     gameOver = True
@@ -550,7 +562,7 @@ def gameProcess():
                                 db.addWinCount(playerId)
 
                                 if len(placement) < 3:
-                                    db.addGameResults(roundCount, placement[0], placement[1])
+                                    db.addGameResults(roundCount, placement[0], placement[1], None)
                                 else:
                                     db.addGameResults(roundCount, placement[0], placement[1], placement[2])
 
@@ -635,7 +647,7 @@ def gameProcess():
                         #   - 2 players
                         #   - More than 3 players
                         if len(placement) < 3:
-                            db.addGameResults(roundCount, placement[0], placement[1])
+                            db.addGameResults(roundCount, placement[0], placement[1], None)
                         else:
                             db.addGameResults(roundCount, placement[0], placement[1], placement[2])
 
