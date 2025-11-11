@@ -270,7 +270,6 @@ class DataHandler:
         # It adds (4 - len("31")) zeros in front.
         newGameId = f"G{largestId + 1:03d}"
 
-
         # Starts to run this process if there are 3 or more players.
         if secondRunnerUp != "":
             newGameResult = [newGameId, roundCount, winner, runnerUp, secondRunnerUp]
