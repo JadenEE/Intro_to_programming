@@ -160,10 +160,6 @@ class DataHandler:
 
         # Delete a player infos and record from the database by player ID.
 
-        # Acts as an identifier key to
-        # identify if the value exists in the database
-        existKey = False
-
         # Capture all the existing players' IDs.
         existingIds = [player[0] for player in players]
 
@@ -189,7 +185,7 @@ class DataHandler:
                 print("❓ This Player ID is not registered.")
 
             # Starts to run the process if all the requirements are passed.
-            elif existKey == True and playerId != "":
+            else:
 
                 # Using for loops to find player's info
                 # by player's ID.
@@ -593,7 +589,7 @@ def main():
         print("[s] -> 👾 Start game")
         print("[e] -> 🔚 Exit")
         print("--------------------------------")
-        print("Type your choice (1 - 6 | s | e) to proceed")
+        print("Type your choice (1 - 5 | s | e) to proceed")
         playerResponse = input(">> ")
         print()
 
