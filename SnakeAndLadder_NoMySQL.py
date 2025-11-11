@@ -309,7 +309,8 @@ def showGameResultsInList():
         print("❌ No games have been played yet!")
         print("Play a game first to see the results.")
     else:
-        for result in gameResults:
+        sortedGameResults = sorted(gameResults, reverse =  True)
+        for result in sortedGameResults:
             print(f"Game ID: {result[0]}")
             print(f"Round(s) played: {result[1]}")
             print(f"Winner: {result[2]}")
