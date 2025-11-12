@@ -591,7 +591,6 @@ def main():
         print("--------------------------------")
         print("Type your choice (1 - 5 | s | e) to proceed")
         playerResponse = input(">> ")
-        print()
 
         db = DataHandler()
 
