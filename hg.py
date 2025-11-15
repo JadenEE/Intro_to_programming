@@ -1,7 +1,5 @@
-number = int(input("Enter any number between 100 and 500: "))
-
-while number < 100 or number > 500:
-    print("Incorrect number, Please enter correct number.")
-    number = int(input("Enter a number between 100 and 500: "))
-else:
-    print("Given number is correct", number)
+for i in range(1, 3):
+    for j in range(1, 5):
+        product = i * j
+        print(f"{i} * {j} = {product}")
+    print()

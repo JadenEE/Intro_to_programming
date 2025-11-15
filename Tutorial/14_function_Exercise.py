@@ -2,7 +2,7 @@ def main():
     pricePerHour = 35
     
     sqfeet = float(input("Enter the square feet of wall space: "))
-    pricePaint = float(input("Enter the price of pain per gallon: "))
+    pricePaint = float(input("Enter the price of paint per gallon: "))
 
     gallonPaint = GallonOfPaint(sqfeet)
     totalLaborHours = TotalLaborHours(sqfeet)

@@ -10,7 +10,7 @@ if hour > baseHour:
     overtimePay = overtime * payRate * ot
     grossPay = baseHour * payRate + overtimePay
 else:
-    grossPay = hour * payrate
+    grossPay = hour * payRate
 
 day = hour / 24
 month = day / 30
