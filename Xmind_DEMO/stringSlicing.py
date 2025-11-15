@@ -12,3 +12,12 @@ def main():
     print(f"Your Login ID: {loginId}")
 
 main()
+
+"""
+Program Output:
+
+Enter first name: Lennard
+Enter last name: Ardnt
+Enter age: 20
+Your Login ID: Leddnt20
+"""
